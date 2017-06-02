@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.bipiinchowdhury.retrofit2demo.model.Example;
 import com.bipiinchowdhury.retrofit2demo.rest.APIClient;
@@ -24,26 +26,20 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getName();
+    TextView textViewResponse;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Button buttonRequest = (Button) findViewById(R.id.btn_request);
+        textViewResponse = (TextView) findViewById(R.id.tv_reponse);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        buttonRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "want to fetch webservice? ", Snackbar.LENGTH_LONG)
-                        .setAction("FETCH", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Log.d(TAG,"snack bar button clicked");
-                                //TODO fetch webservice using retro fit
-                                fetchDemoURL();;
-                            }
-                        });
+                fetchDemoURL();
             }
         });
     }
@@ -57,7 +53,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Example>call, Response<Example> response) {
                 Example example = response.body();
-                Log.d(TAG, "Number of movies received: " + example.toString());
+                Log.d(TAG, "response received: " + example.toString());
+                textViewResponse.setText(example.toString());
             }
 
             @Override
